@@ -19,7 +19,7 @@ public class BaseTest {
         System.setProperty("webriver.driver.chromedriver", "C:\\Nova fascikla\\chromedriver_win32\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(50));
     }
 
     @BeforeMethod

@@ -1,8 +1,13 @@
 package tests;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.LoginPage;
+
+import java.util.List;
 
 public class LoginTests extends BaseTest {
 
@@ -27,7 +32,7 @@ public class LoginTests extends BaseTest {
     }
 
     @Test
-    public void checksInputTypes() {
+    public void checksInputAttributeTypes() {
         Assert.assertEquals(loginPage.getEmailInputField().getAttribute("type"), "email");
         Assert.assertEquals(loginPage.getPasswordInputField().getAttribute("type"), "password");
     }
@@ -35,39 +40,40 @@ public class LoginTests extends BaseTest {
     @Test
     public void loginInvalidUsernameInvalidPassword() {
         loginPage.loginInvalidUsernameInvalidPassword();
+        Assert.assertEquals(loginPage.getUserDoesNotExistsPopupMessage().getText(), "User does not exists");
+        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
     }
 
     @Test
     public void loginValidUsernameInvalidPassword() {
         loginPage.loginValidUsernameInvalidPassword();
+        Assert.assertEquals(loginPage.getUserDoesNotExistsPopupMessage().getText(), "Wrong password");
+        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
     }
 
     @Test
     public void loginValidUsernameValidPassword() {
         loginPage.loginValidUsernameValidPassword();
         Assert.assertTrue(driver.getCurrentUrl().endsWith("/home"));
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
     public void logout() {
-        loginPage.logout();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        loginPage.loginValidUsernameValidPassword();
+        Assert.assertTrue(loginPage.getLogoutButton().isDisplayed());
+        loginPage.getLogoutButton().click();
+        webDriverWait.until(ExpectedConditions.urlContains("/login"));
+        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
+        driver.get("https://vue-demo.daniel-avellaneda.com/home");
+        driver.manage().window().fullscreen();
+        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
     }
 
     @AfterMethod
     public void afterMethod() {
-        //   webDriverWait.until(ExpectedConditions.visibilityOf(loginPage.getBuyMeACoffeButton()));
-        if (driver.getCurrentUrl().endsWith("/home)") && loginPage.getLogoutButton().isDisplayed() && loginPage.getLogoutButton().getText().equals(" Logout ")) {
-            loginPage.getLogoutButton().click();
+        List<WebElement> elements = driver.findElements(By.className("btnLogout"));
+        if (!elements.isEmpty()) {
+            elements.get(0).click();
         }
     }
 }
