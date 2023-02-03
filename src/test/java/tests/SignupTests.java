@@ -50,7 +50,7 @@ public class SignupTests extends BaseTest {
 
     @Test
     public void signUp() {
-        signupPage.signUp("Nemanja Avrić", "avricnemanja91@gmail.com", "fearIsTheMindKiller");
+        signupPage.signUp("Nemanja Avrić", "avricnemanja94@gmail.com", "fearIsTheMindKiller");
         webDriverWait.until(ExpectedConditions.textToBePresentInElement(signupPage.getVerifyYourAccountMessage(), "IMPORTANT: Verify your account"));
         Assert.assertEquals(signupPage.getVerifyYourAccountMessage().getText(), "IMPORTANT: Verify your account");
         signupPage.getCloseButton().click();

@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends BasePage {
     @FindBy(xpath = "//*[@id=\"app\"]/div/div/header/div/div[3]/a[3]")
-    //*[@id="app"]/div[1]/div/header/div/div[3]/a[3]
     private WebElement loginButton;
     @FindBy(id = "email")
     private WebElement emailInputField;
@@ -47,14 +46,6 @@ public class LoginPage extends BasePage {
 
     public WebElement getLogoutButton() {
         return logoutButton;
-    }
-
-    public WebElement getBuyMeACoffeButton() {
-        return buyMeACoffeButton;
-    }
-
-    public WebElement getLoginPageLoginButton() {
-        return loginPageLoginButton;
     }
 
     public void loginInvalidUsernameInvalidPassword() {
