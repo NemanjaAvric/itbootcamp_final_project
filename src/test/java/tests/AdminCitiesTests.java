@@ -33,7 +33,7 @@ public class AdminCitiesTests extends BaseTest {
     public void beforeMethod() {
         super.beforeMethod();
         loginPage.getLoginButton().click();
-        loginPage.loginValidUsernameValidPassword();
+        loginPage.login(loginPage.getVALIDEMAIL(), loginPage.getVALIDPASSWORD());
         adminCitiesPage.visitAdminCitiesPageListCitiesPt2();
     }
 

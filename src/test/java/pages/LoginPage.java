@@ -1,6 +1,5 @@
 package pages;
 
-import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,6 +22,10 @@ public class LoginPage extends BasePage {
     private WebElement buyMeACoffeButton;
     @FindBy(className = "btnLogout")
     private WebElement logoutButton;
+
+    private final String VALIDEMAIL = "admin@admin.com";
+
+    private final String VALIDPASSWORD = "12345";
 
     public LoginPage(WebDriver driver, WebDriverWait webDriverWait) {
         super(driver, webDriverWait);
@@ -48,25 +51,22 @@ public class LoginPage extends BasePage {
         return logoutButton;
     }
 
-    public void loginInvalidUsernameInvalidPassword() {
-        Faker faker = new Faker();
-        emailInputField.sendKeys(faker.internet().emailAddress());
-        passwordInputField.sendKeys(faker.internet().password());
-        loginPageLoginButton.click();
+    public WebElement getBuyMeACoffeButton() {
+        return buyMeACoffeButton;
     }
 
-    public void loginValidUsernameInvalidPassword() {
-        Faker faker = new Faker();
-        emailInputField.sendKeys("admin@admin.com");
-        passwordInputField.sendKeys(faker.internet().password());
-        loginPageLoginButton.click();
+    public String getVALIDEMAIL() {
+        return VALIDEMAIL;
     }
 
-    public void loginValidUsernameValidPassword() {
+    public String getVALIDPASSWORD() {
+        return VALIDPASSWORD;
+    }
+
+    public void login(String email, String password) {
         webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
-        emailInputField.sendKeys("admin@admin.com");
-        passwordInputField.sendKeys("12345");
+        emailInputField.sendKeys(email);
+        passwordInputField.sendKeys(password);
         loginPageLoginButton.click();
-        webDriverWait.until(ExpectedConditions.visibilityOf(buyMeACoffeButton));
     }
 }

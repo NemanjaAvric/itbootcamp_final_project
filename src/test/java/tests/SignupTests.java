@@ -43,14 +43,14 @@ public class SignupTests extends BaseTest {
 
     @Test
     public void displaysErrorsWhenUserAlreadyExists() {
-        signupPage.displaysErrorsWhenUserAlreadyExists();
+        signupPage.signUp("Test Test", "admin@admin.com", "123654");
         Assert.assertEquals(signupPage.getEmailAlreadyExistsMessage().getText(), "E-mail already exists");
         Assert.assertTrue(driver.getCurrentUrl().endsWith("/signup"));
     }
 
     @Test
     public void signUp() {
-        signupPage.signUp("Nemanja Avrić", "avricnemanja94@gmail.com", "fearIsTheMindKiller");
+        signupPage.signUp("Nemanja Avrić", "avricnemanja06@gmail.com", "fearIsTheMindKiller");
         webDriverWait.until(ExpectedConditions.textToBePresentInElement(signupPage.getVerifyYourAccountMessage(), "IMPORTANT: Verify your account"));
         Assert.assertEquals(signupPage.getVerifyYourAccountMessage().getText(), "IMPORTANT: Verify your account");
         signupPage.getCloseButton().click();
@@ -63,6 +63,4 @@ public class SignupTests extends BaseTest {
             elements.get(0).click();
         }
     }
-
-
 }

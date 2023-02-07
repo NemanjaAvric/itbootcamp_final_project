@@ -3,7 +3,6 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-//import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SignupPage extends BasePage {
@@ -58,21 +57,11 @@ public class SignupPage extends BasePage {
         return closeButton;
     }
 
-    public void displaysErrorsWhenUserAlreadyExists() {
-        nameInputField.sendKeys("Test Test");
-        emailInputField.sendKeys("admin@admin.com");
-        passwordInputField.sendKeys("123654");
-        confirmPasswordField.sendKeys("123654");
-        signMeUpButton.click();
-    }
-
-
     public void signUp(String firstNameLastName, String email, String password) {
         nameInputField.sendKeys(firstNameLastName);
         emailInputField.sendKeys(email);
         passwordInputField.sendKeys(password);
         confirmPasswordField.sendKeys(password);
         signMeUpButton.click();
-        //  webDriverWait.until(ExpectedConditions.textToBePresentInElement(verifyYourAccountMessage, " IMPORTANT: Verify your account "));
     }
 }

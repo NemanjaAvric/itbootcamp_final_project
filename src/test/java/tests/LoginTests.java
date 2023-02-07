@@ -1,5 +1,6 @@
 package tests;
 
+import com.github.javafaker.Faker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,11 +14,18 @@ public class LoginTests extends BaseTest {
 
     private LoginPage loginPage;
 
+    private String invalidPassword;
+
+    private String invalidEmail;
+
     @Override
     @BeforeClass
     public void beforeClass() {
         super.beforeClass();
         loginPage = new LoginPage(driver, webDriverWait);
+        Faker faker = new Faker();
+        invalidEmail = faker.internet().emailAddress();
+        invalidPassword = faker.internet().password();
     }
 
     @BeforeMethod
@@ -38,28 +46,29 @@ public class LoginTests extends BaseTest {
     }
 
     @Test
-    public void loginInvalidUsernameInvalidPassword() {
-        loginPage.loginInvalidUsernameInvalidPassword();
+    public void loginInvalidEmailInvalidPassword() {
+        loginPage.login(invalidEmail, invalidPassword);
         Assert.assertEquals(loginPage.getUserDoesNotExistsPopupMessage().getText(), "User does not exists");
         Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
     }
 
     @Test
-    public void loginValidUsernameInvalidPassword() {
-        loginPage.loginValidUsernameInvalidPassword();
+    public void loginValidEmailInvalidPassword() {
+        loginPage.login(loginPage.getVALIDEMAIL(), invalidPassword);
         Assert.assertEquals(loginPage.getUserDoesNotExistsPopupMessage().getText(), "Wrong password");
         Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
     }
 
     @Test
-    public void loginValidUsernameValidPassword() {
-        loginPage.loginValidUsernameValidPassword();
+    public void loginValidEmailValidPassword() {
+        loginPage.login(loginPage.getVALIDEMAIL(), loginPage.getVALIDPASSWORD());
+        webDriverWait.until(ExpectedConditions.visibilityOf(loginPage.getBuyMeACoffeButton()));
         Assert.assertTrue(driver.getCurrentUrl().endsWith("/home"));
     }
 
     @Test
     public void logout() {
-        loginPage.loginValidUsernameValidPassword();
+        loginPage.login(loginPage.getVALIDEMAIL(), loginPage.getVALIDPASSWORD());
         Assert.assertTrue(loginPage.getLogoutButton().isDisplayed());
         loginPage.getLogoutButton().click();
         webDriverWait.until(ExpectedConditions.urlContains("/login"));

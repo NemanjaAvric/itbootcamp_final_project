@@ -9,8 +9,9 @@ import org.testng.annotations.BeforeMethod;
 
 import java.time.Duration;
 
-public class BaseTest {
+public abstract class BaseTest {
     protected WebDriver driver;
+
     protected WebDriverWait webDriverWait;
     protected final String BASEURL = "https://vue-demo.daniel-avellaneda.com";
 
@@ -19,7 +20,7 @@ public class BaseTest {
         System.setProperty("webriver.driver.chromedriver", "C:\\Nova fascikla\\chromedriver_win32\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
     @BeforeMethod
