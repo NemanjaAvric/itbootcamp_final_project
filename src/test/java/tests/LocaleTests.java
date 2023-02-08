@@ -19,18 +19,18 @@ public class LocaleTests extends BaseTest {
     @Test
     public void setLocalToSpanish() {
         localePage.changeLocal(localePage.getShapnishLocal());
-        Assert.assertEquals(localePage.getPageTitle().getText(), "Página de aterrizaje");
+        Assert.assertEquals(localePage.getWebElementText(localePage.getPageTitle()), "Página de aterrizaje");
     }
 
     @Test
     public void setLocalToEnglish() {
         localePage.changeLocal(localePage.getEnsglishLocal());
-        Assert.assertEquals(localePage.getPageTitle().getText(), "Landing");
+        Assert.assertEquals(localePage.getWebElementText(localePage.getPageTitle()), "Landing");
     }
 
     @Test
     public void setLocaleToFrench() {
         localePage.changeLocal(localePage.getFrenchLocal());
-        Assert.assertEquals(localePage.getPageTitle().getText(), "Page d'atterrissage");
+        Assert.assertEquals(localePage.getWebElementText(localePage.getPageTitle()), "Page d'atterrissage");
     }
 }

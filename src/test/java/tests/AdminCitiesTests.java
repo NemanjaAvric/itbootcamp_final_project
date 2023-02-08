@@ -1,17 +1,12 @@
 package tests;
 
-import com.github.javafaker.Faker;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.AdminCitiesPage;
 import pages.LoginPage;
 
-import java.util.List;
 
 public class AdminCitiesTests extends BaseTest {
 
@@ -25,55 +20,48 @@ public class AdminCitiesTests extends BaseTest {
         super.beforeClass();
         loginPage = new LoginPage(driver, webDriverWait);
         adminCitiesPage = new AdminCitiesPage(driver, webDriverWait);
-        Faker faker = new Faker();
-        cityName = faker.address().cityName();
     }
 
     @BeforeMethod
     public void beforeMethod() {
         super.beforeMethod();
         loginPage.getLoginButton().click();
-        loginPage.login(loginPage.getVALIDEMAIL(), loginPage.getVALIDPASSWORD());
+        loginPage.login(loginPage.VALID_EMAIL, loginPage.VALID_PASSWORD);
         adminCitiesPage.visitAdminCitiesPageListCitiesPt2();
+        cityName = utility.fakeCity();
     }
 
     @Test
     public void visitAdminCitiesPageListCities() {
-        Assert.assertTrue(driver.getCurrentUrl().endsWith("/admin/cities"));
-        Assert.assertTrue(loginPage.getLogoutButton().isDisplayed());
+        Assert.assertTrue(driver.getCurrentUrl().endsWith(adminCitiesPage.ADMIN_CITIES_PAGE_URL_ENDING));
+        Assert.assertTrue(loginPage.webelementIsDisplayed(loginPage.getLogoutButton()));
     }
 
     @Test
     public void createNewCity() {
         adminCitiesPage.addNewItem(cityName);
-        Assert.assertTrue(adminCitiesPage.getItemSavedClosePopupMessage().getText().contains("Saved successfully"));
+        Assert.assertTrue(adminCitiesPage.getWebElementText(adminCitiesPage.getItemSavedClosePopupMessage()).contains("Saved successfully"));
     }
 
-    @Test(dependsOnMethods = "createNewCity")
+    @Test
     public void editCity() {
-        adminCitiesPage.editCity(cityName);
-        Assert.assertTrue(adminCitiesPage.getItemSavedClosePopupMessage().getText().contains("Saved successfully"));
+        adminCitiesPage.editNewCity(cityName);
+        Assert.assertTrue(adminCitiesPage.getWebElementText(adminCitiesPage.getItemSavedClosePopupMessage()).contains("Saved successfully"));
     }
 
-    @Test(dependsOnMethods = "editCity")
+    @Test
     public void searchCity() {
+        adminCitiesPage.editNewCity(cityName);
         adminCitiesPage.searchCity(cityName + " edited");
-        Assert.assertEquals(adminCitiesPage.getSearchResult().getText(), cityName + " edited");
+        Assert.assertEquals(adminCitiesPage.getWebElementText(adminCitiesPage.getSearchResult()), cityName + " edited");
     }
 
-    @Test(dependsOnMethods = "searchCity")
+    @Test
     public void deleteCity() {
-        adminCitiesPage.searchCity(cityName + " edited");
-        Assert.assertEquals(adminCitiesPage.getNameOfCitySearchResult().getText(), cityName + " edited");
+        adminCitiesPage.editNewCity(cityName);
+        adminCitiesPage.searchCityWait(cityName);
+        Assert.assertTrue(adminCitiesPage.getWebElementText(adminCitiesPage.getNameOfCitySearchResult()).contains(cityName));
         adminCitiesPage.deleteCity();
-        Assert.assertTrue(adminCitiesPage.getItemSavedClosePopupMessage().getText().contains("Deleted successfully"));
-    }
-
-    @AfterMethod
-    public void afterMethod() {
-        List<WebElement> elements = driver.findElements(By.className("btnLogout"));
-        if (!elements.isEmpty()) {
-            elements.get(0).click();
-        }
+        Assert.assertTrue(adminCitiesPage.getWebElementText(adminCitiesPage.getItemSavedClosePopupMessage()).contains("Deleted successfully"));
     }
 }

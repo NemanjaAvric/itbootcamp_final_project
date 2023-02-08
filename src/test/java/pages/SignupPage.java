@@ -24,6 +24,7 @@ public class SignupPage extends BasePage {
     private WebElement verifyYourAccountMessage;
     @FindBy(xpath = "//*[@id=\"app\"]/div[4]/div/div/div[3]/button/span")
     private WebElement closeButton;
+    public final String SIGN_UP_PAGE_URL_ENDING = "/signup";
 
     public SignupPage(WebDriver driver, WebDriverWait webDriverWait) {
         super(driver, webDriverWait);
@@ -63,5 +64,10 @@ public class SignupPage extends BasePage {
         passwordInputField.sendKeys(password);
         confirmPasswordField.sendKeys(password);
         signMeUpButton.click();
+    }
+
+    public void signUpWait(String firstNameLastName, String email, String password) {
+        signUp(firstNameLastName, email, password);
+        waitTextToBePresentInElement(verifyYourAccountMessage, "IMPORTANT: Verify your account");
     }
 }

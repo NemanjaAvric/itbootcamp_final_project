@@ -2,7 +2,6 @@ package pages;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ProfilePage extends BasePage {
@@ -26,6 +25,8 @@ public class ProfilePage extends BasePage {
     private WebElement profileSavedSuccessfullyMessage;
     @FindBy(xpath = "//*[@id=\"app\"]/div[1]/main/div/div[2]/div/div/div[2]/span/form/div/div/div[4]/span/div/div/div[1]/div[1]/div[1]/div/button")
     private WebElement deleteCityButton;
+
+    public final String PROFILE_PAGE_URL_ENDING = "/profile";
 
     public ProfilePage(WebDriver driver, WebDriverWait webDriverWait) {
         super(driver, webDriverWait);
@@ -69,29 +70,26 @@ public class ProfilePage extends BasePage {
     }
 
     private void clearInputField(WebElement element) {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        element.click();
         element.sendKeys(Keys.CONTROL + "a");
         element.sendKeys(Keys.DELETE);
     }
 
+    public void chooseCity(String city) {
+        cityInputFieldMyProfile.click();
+        cityInputFieldMyProfile.sendKeys(Keys.ENTER, city, Keys.ENTER);
+    }
+
     public void editProfile(String name, String phoneNumber, String city, String country, String twitterURL, String gitHubURL) {
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(myProfileButton));
         myProfileButton.click();
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(nameInputFieldMyProfile));
         clearAllInputFields();
         nameInputFieldMyProfile.sendKeys(name);
         phoneInputFieldMyProfile.sendKeys(phoneNumber);
-        cityInputFieldMyProfile.click();
-        cityInputFieldMyProfile.sendKeys(Keys.ENTER, city, Keys.ENTER);
+        chooseCity(city);
         countryInputFieldMyProfile.sendKeys(country);
         twitterURLInputFieldMyProfile.sendKeys("https://" + twitterURL);
         gitHubURLInputFieldMyProfile.sendKeys("https://" + gitHubURL);
         saveButton.click();
-        webDriverWait.until(ExpectedConditions.visibilityOf(profileSavedSuccessfullyMessage));
     }
 }
 

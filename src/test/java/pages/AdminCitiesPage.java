@@ -1,11 +1,9 @@
 package pages;
 
-import com.github.javafaker.Faker;
-import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AdminCitiesPage extends BasePage {
@@ -34,10 +32,11 @@ public class AdminCitiesPage extends BasePage {
     private WebElement searchResult;
     @FindBy(id = "delete")
     private WebElement deleteCityButton;
-    @FindBy(className = "text--lighten3")
+    @FindBy(css = " #app > div.v-dialog__content.v-dialog__content--active > div > div > div.v-card__actions > button.v-btn.v-btn--text.theme--light.v-size--default.red--text.text--lighten3")
     private WebElement confirmDeleteCityButton;
     @FindBy(xpath = "//*[@id=\"app\"]/div[1]/main/div/div[2]/div/div[1]/div[2]/table/tbody/tr/td[2]")
     private WebElement nameOfCitySearchResult;
+    public final String ADMIN_CITIES_PAGE_URL_ENDING = "/admin/cities";
 
     public AdminCitiesPage(WebDriver driver, WebDriverWait webDriverWait) {
         super(driver, webDriverWait);
@@ -56,41 +55,43 @@ public class AdminCitiesPage extends BasePage {
     }
 
     public void visitAdminCitiesPageListCitiesPt2() {
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(adminButton));
         adminButton.click();
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(citiesButton));
         citiesButton.click();
     }
 
     public void addNewItem(String cityName) {
-        Faker faker = new Faker();
         newItemButton.click();
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(newItemNameInputField));
         newItemNameInputField.sendKeys(cityName);
         saveButton.click();
-        webDriverWait.until(ExpectedConditions.textToBePresentInElement(itemSavedClosePopupMessage, "Saved successfully"));
     }
 
     public void searchCity(String cityName) {
+        searchBar.click();
+        searchBar.sendKeys(Keys.CONTROL + "a");
+        searchBar.sendKeys(Keys.DELETE);
         searchBar.sendKeys(cityName);
-        webDriverWait.until(ExpectedConditions.numberOfElementsToBe(By.xpath("//*[@id=\"app\"]/div[1]/main/div/div[2]/div/div[1]/div[2]/table/tbody/tr"), 1));
     }
 
-    public void editCity(String cityName) {
+    public void searchCityWait(String cityName) {
         searchCity(cityName);
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(citySearchResultEditPen));
+        waitForNumberOfElementsToBe("//*[@id=\"app\"]/div[1]/main/div/div[2]/div/div[1]/div[2]/table/tbody/tr", 1);
+    }
+
+    public void editCity() {
         citySearchResultEditPen.click();
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(editItemPopupMessageInputField));
         editItemPopupMessageInputField.sendKeys(" edited");
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(saveButtonPopupMessageInputField));
         saveButtonPopupMessageInputField.click();
-        webDriverWait.until(ExpectedConditions.textToBePresentInElement(itemSavedClosePopupMessage, "Saved successfully"));
     }
 
     public void deleteCity() {
         deleteCityButton.click();
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(confirmDeleteCityButton));
         confirmDeleteCityButton.click();
-        webDriverWait.until(ExpectedConditions.visibilityOf(itemSavedClosePopupMessage));
+        waitForVisibilityOfElement(itemSavedClosePopupMessage);
+    }
+
+    public void editNewCity(String city) {
+        addNewItem(city);
+        searchCity(city);
+        editCity();
     }
 }

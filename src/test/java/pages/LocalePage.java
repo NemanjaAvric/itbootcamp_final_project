@@ -3,7 +3,6 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LocalePage extends BasePage {
@@ -40,7 +39,6 @@ public class LocalePage extends BasePage {
 
     public void changeLocal(WebElement local) {
         changeLocal.click();
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(local));
         local.click();
     }
 }

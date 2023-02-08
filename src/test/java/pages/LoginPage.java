@@ -1,10 +1,8 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends BasePage {
@@ -22,10 +20,9 @@ public class LoginPage extends BasePage {
     private WebElement buyMeACoffeButton;
     @FindBy(className = "btnLogout")
     private WebElement logoutButton;
-
-    private final String VALIDEMAIL = "admin@admin.com";
-
-    private final String VALIDPASSWORD = "12345";
+    public final String VALID_EMAIL = "admin@admin.com";
+    public final String VALID_PASSWORD = "12345";
+    public final String LOGIN_PAGE_URL_ENDING = "/login";
 
     public LoginPage(WebDriver driver, WebDriverWait webDriverWait) {
         super(driver, webDriverWait);
@@ -51,22 +48,19 @@ public class LoginPage extends BasePage {
         return logoutButton;
     }
 
-    public WebElement getBuyMeACoffeButton() {
-        return buyMeACoffeButton;
-    }
-
-    public String getVALIDEMAIL() {
-        return VALIDEMAIL;
-    }
-
-    public String getVALIDPASSWORD() {
-        return VALIDPASSWORD;
-    }
-
     public void login(String email, String password) {
-        webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
         emailInputField.sendKeys(email);
         passwordInputField.sendKeys(password);
         loginPageLoginButton.click();
+    }
+
+    public void loginWait(String email, String password) {
+        login(email, password);
+        waitForVisibilityOfElement(buyMeACoffeButton);
+    }
+
+    public void logout() {
+        logoutButton.click();
+        waitForURLToContain(LOGIN_PAGE_URL_ENDING);
     }
 }

@@ -1,14 +1,8 @@
 package tests;
 
-import com.github.javafaker.Faker;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.LoginPage;
-
-import java.util.List;
 
 public class LoginTests extends BaseTest {
 
@@ -23,9 +17,8 @@ public class LoginTests extends BaseTest {
     public void beforeClass() {
         super.beforeClass();
         loginPage = new LoginPage(driver, webDriverWait);
-        Faker faker = new Faker();
-        invalidEmail = faker.internet().emailAddress();
-        invalidPassword = faker.internet().password();
+        invalidEmail = utility.fakeEmail();
+        invalidPassword = utility.fakePassword();
     }
 
     @BeforeMethod
@@ -36,53 +29,42 @@ public class LoginTests extends BaseTest {
 
     @Test
     public void visitTheLoginPage() {
-        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
+        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
     }
 
     @Test
     public void checksInputAttributeTypes() {
-        Assert.assertEquals(loginPage.getEmailInputField().getAttribute("type"), "email");
-        Assert.assertEquals(loginPage.getPasswordInputField().getAttribute("type"), "password");
+        Assert.assertEquals(loginPage.getWebElementAttributeType(loginPage.getEmailInputField()), "email");
+        Assert.assertEquals(loginPage.getWebElementAttributeType(loginPage.getPasswordInputField()), "password");
     }
 
     @Test
     public void loginInvalidEmailInvalidPassword() {
         loginPage.login(invalidEmail, invalidPassword);
-        Assert.assertEquals(loginPage.getUserDoesNotExistsPopupMessage().getText(), "User does not exists");
-        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
+        Assert.assertEquals(loginPage.getWebElementText(loginPage.getUserDoesNotExistsPopupMessage()), "User does not exists");
+        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
     }
 
     @Test
     public void loginValidEmailInvalidPassword() {
-        loginPage.login(loginPage.getVALIDEMAIL(), invalidPassword);
-        Assert.assertEquals(loginPage.getUserDoesNotExistsPopupMessage().getText(), "Wrong password");
-        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
+        loginPage.login(loginPage.VALID_EMAIL, invalidPassword);
+        Assert.assertEquals(loginPage.getWebElementText(loginPage.getUserDoesNotExistsPopupMessage()), "Wrong password");
+        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
     }
 
     @Test
     public void loginValidEmailValidPassword() {
-        loginPage.login(loginPage.getVALIDEMAIL(), loginPage.getVALIDPASSWORD());
-        webDriverWait.until(ExpectedConditions.visibilityOf(loginPage.getBuyMeACoffeButton()));
-        Assert.assertTrue(driver.getCurrentUrl().endsWith("/home"));
+        loginPage.loginWait(loginPage.VALID_EMAIL, loginPage.VALID_PASSWORD);
+        Assert.assertTrue(driver.getCurrentUrl().endsWith(HOME_PAGE_URL_ENDING));
     }
 
     @Test
     public void logout() {
-        loginPage.login(loginPage.getVALIDEMAIL(), loginPage.getVALIDPASSWORD());
-        Assert.assertTrue(loginPage.getLogoutButton().isDisplayed());
-        loginPage.getLogoutButton().click();
-        webDriverWait.until(ExpectedConditions.urlContains("/login"));
-        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
-        driver.get("https://vue-demo.daniel-avellaneda.com/home");
-        driver.manage().window().fullscreen();
-        Assert.assertTrue(driver.getCurrentUrl().endsWith("/login"));
-    }
-
-    @AfterMethod
-    public void afterMethod() {
-        List<WebElement> elements = driver.findElements(By.className("btnLogout"));
-        if (!elements.isEmpty()) {
-            elements.get(0).click();
-        }
+        loginPage.login(loginPage.VALID_EMAIL, loginPage.VALID_PASSWORD);
+        Assert.assertTrue(loginPage.webelementIsDisplayed(loginPage.getLogoutButton()));
+        loginPage.logout();
+        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
+        driver.get(BASEURL + HOME_PAGE_URL_ENDING);
+        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
     }
 }
