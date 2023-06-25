@@ -1,6 +1,7 @@
 package utility;
 
 import com.github.javafaker.Faker;
+import org.openqa.selenium.WebElement;
 
 public class Utility {
     private Faker faker = new Faker();
@@ -31,5 +32,9 @@ public class Utility {
 
     public String fakeURL() {
         return faker.internet().url();
+    }
+
+    public void clickOnWebElement(WebElement element) {
+        element.click();
     }
 }

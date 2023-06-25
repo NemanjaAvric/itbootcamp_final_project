@@ -38,7 +38,7 @@ public class LocalePage extends BasePage {
     }
 
     public void changeLocal(WebElement local) {
-        changeLocal.click();
-        local.click();
+        utility.clickOnWebElement(changeLocal);
+        utility.clickOnWebElement(local);
     }
 }

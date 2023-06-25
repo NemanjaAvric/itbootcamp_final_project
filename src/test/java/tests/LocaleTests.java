@@ -1,6 +1,5 @@
 package tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.LocalePage;
@@ -8,6 +7,12 @@ import pages.LocalePage;
 public class LocaleTests extends BaseTest {
 
     private LocalePage localePage;
+
+    private final String EXCPECTED_PAGE_TITLE_SPANISH = "Página de aterrizaje";
+
+    private final String EXCPECTED_PAGE_TITLE_FRENCH = "Page d'atterrissage";
+
+    private final String EXCPECTED_PAGE_TITLE_ENGLISH = "Landing";
 
     @Override
     @BeforeClass
@@ -19,18 +24,18 @@ public class LocaleTests extends BaseTest {
     @Test
     public void setLocalToSpanish() {
         localePage.changeLocal(localePage.getShapnishLocal());
-        Assert.assertEquals(localePage.getWebElementText(localePage.getPageTitle()), "Página de aterrizaje");
+        assertEquals(localePage.getWebElementText(localePage.getPageTitle()), EXCPECTED_PAGE_TITLE_SPANISH);
     }
 
     @Test
     public void setLocalToEnglish() {
         localePage.changeLocal(localePage.getEnsglishLocal());
-        Assert.assertEquals(localePage.getWebElementText(localePage.getPageTitle()), "Landing");
+        assertEquals(localePage.getWebElementText(localePage.getPageTitle()), EXCPECTED_PAGE_TITLE_ENGLISH);
     }
 
     @Test
     public void setLocaleToFrench() {
         localePage.changeLocal(localePage.getFrenchLocal());
-        Assert.assertEquals(localePage.getWebElementText(localePage.getPageTitle()), "Page d'atterrissage");
+        assertEquals(localePage.getWebElementText(localePage.getPageTitle()), EXCPECTED_PAGE_TITLE_FRENCH);
     }
 }

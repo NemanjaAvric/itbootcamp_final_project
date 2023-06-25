@@ -1,6 +1,5 @@
 package pages;
 
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -38,6 +37,8 @@ public class AdminCitiesPage extends BasePage {
     private WebElement nameOfCitySearchResult;
     public final String ADMIN_CITIES_PAGE_URL_ENDING = "/admin/cities";
 
+    private final String EDIT_CITY_TEXT = " edited";
+
     public AdminCitiesPage(WebDriver driver, WebDriverWait webDriverWait) {
         super(driver, webDriverWait);
     }
@@ -55,21 +56,19 @@ public class AdminCitiesPage extends BasePage {
     }
 
     public void visitAdminCitiesPageListCitiesPt2() {
-        adminButton.click();
-        citiesButton.click();
+        utility.clickOnWebElement(adminButton);
+        utility.clickOnWebElement(citiesButton);
     }
 
     public void addNewItem(String cityName) {
-        newItemButton.click();
-        newItemNameInputField.sendKeys(cityName);
-        saveButton.click();
+        utility.clickOnWebElement(newItemButton);
+        sendKeysToElement(newItemNameInputField, cityName);
+        utility.clickOnWebElement(saveButton);
     }
 
     public void searchCity(String cityName) {
-        searchBar.click();
-        searchBar.sendKeys(Keys.CONTROL + "a");
-        searchBar.sendKeys(Keys.DELETE);
-        searchBar.sendKeys(cityName);
+        clearInputField(searchBar);
+        sendKeysToElement(searchBar, cityName);
     }
 
     public void searchCityWait(String cityName) {
@@ -77,15 +76,19 @@ public class AdminCitiesPage extends BasePage {
         waitForNumberOfElementsToBe("//*[@id=\"app\"]/div[1]/main/div/div[2]/div/div[1]/div[2]/table/tbody/tr", 1);
     }
 
+    public String getEDIT_CITY_TEXT() {
+        return EDIT_CITY_TEXT;
+    }
+
     public void editCity() {
-        citySearchResultEditPen.click();
-        editItemPopupMessageInputField.sendKeys(" edited");
-        saveButtonPopupMessageInputField.click();
+        utility.clickOnWebElement(citySearchResultEditPen);
+        sendKeysToElement(editItemPopupMessageInputField, EDIT_CITY_TEXT);
+        utility.clickOnWebElement(saveButtonPopupMessageInputField);
     }
 
     public void deleteCity() {
-        deleteCityButton.click();
-        confirmDeleteCityButton.click();
+        utility.clickOnWebElement(deleteCityButton);
+        utility.clickOnWebElement(confirmDeleteCityButton);
         waitForVisibilityOfElement(itemSavedClosePopupMessage);
     }
 

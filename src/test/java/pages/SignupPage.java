@@ -26,6 +26,12 @@ public class SignupPage extends BasePage {
     private WebElement closeButton;
     public final String SIGN_UP_PAGE_URL_ENDING = "/signup";
 
+    private final String EXCPECTED_VERIFY_YOUR_ACCOUNT_MESSAGE = "IMPORTANT: Verify your account";
+
+    public String getEXCPECTED_VERIFY_YOUR_ACCOUNT_MESSAGE() {
+        return EXCPECTED_VERIFY_YOUR_ACCOUNT_MESSAGE;
+    }
+
     public SignupPage(WebDriver driver, WebDriverWait webDriverWait) {
         super(driver, webDriverWait);
     }
@@ -59,15 +65,15 @@ public class SignupPage extends BasePage {
     }
 
     public void signUp(String firstNameLastName, String email, String password) {
-        nameInputField.sendKeys(firstNameLastName);
-        emailInputField.sendKeys(email);
-        passwordInputField.sendKeys(password);
-        confirmPasswordField.sendKeys(password);
-        signMeUpButton.click();
+        sendKeysToElement(nameInputField, firstNameLastName);
+        sendKeysToElement(emailInputField, email);
+        sendKeysToElement(passwordInputField, password);
+        sendKeysToElement(confirmPasswordField, password);
+        utility.clickOnWebElement(signMeUpButton);
     }
 
     public void signUpWait(String firstNameLastName, String email, String password) {
         signUp(firstNameLastName, email, password);
-        waitTextToBePresentInElement(verifyYourAccountMessage, "IMPORTANT: Verify your account");
+        waitTextToBePresentInElement(verifyYourAccountMessage, EXCPECTED_VERIFY_YOUR_ACCOUNT_MESSAGE);
     }
 }

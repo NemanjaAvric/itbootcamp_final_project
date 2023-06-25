@@ -1,6 +1,5 @@
 package tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import pages.AdminCitiesPage;
@@ -25,26 +24,26 @@ public class AuthRoutesTests extends BaseTest {
 
     @Test
     public void homeVisitForbidIfNotAuthenticated() {
-        driver.navigate().to(BASEURL + HOME_PAGE_URL_ENDING);
-        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
+        driverNavigateTo(BASEURL + HOME_PAGE_URL_ENDING);
+        assertTrue(loginPage.LOGIN_PAGE_URL_ENDING);
     }
 
     @Test
     public void profileVisitForbidIfNotAuthenticated() {
-        driver.navigate().to(BASEURL + profilePage.PROFILE_PAGE_URL_ENDING);
-        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
+        driverNavigateTo(BASEURL + profilePage.PROFILE_PAGE_URL_ENDING);
+        assertTrue(loginPage.LOGIN_PAGE_URL_ENDING);
     }
 
     @Test
     public void citiesAdminVisitForbidIfNotAuthenticated() {
-        driver.navigate().to(BASEURL + adminCitiesPage.ADMIN_CITIES_PAGE_URL_ENDING);
-        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
+        driverNavigateTo(BASEURL + adminCitiesPage.ADMIN_CITIES_PAGE_URL_ENDING);
+        assertTrue(loginPage.LOGIN_PAGE_URL_ENDING);
     }
 
     @Test
     public void usersAdminVisitForbidIfNotAuthenticated() {
-        driver.navigate().to(BASEURL + ADMIN_USERS_PAGE_URL_ENDING);
-        Assert.assertTrue(driver.getCurrentUrl().endsWith(loginPage.LOGIN_PAGE_URL_ENDING));
+        driverNavigateTo(BASEURL + ADMIN_USERS_PAGE_URL_ENDING);
+        assertTrue(loginPage.LOGIN_PAGE_URL_ENDING);
     }
 
 }

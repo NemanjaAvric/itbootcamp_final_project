@@ -49,9 +49,9 @@ public class LoginPage extends BasePage {
     }
 
     public void login(String email, String password) {
-        emailInputField.sendKeys(email);
-        passwordInputField.sendKeys(password);
-        loginPageLoginButton.click();
+        sendKeysToElement(emailInputField, email);
+        sendKeysToElement(passwordInputField, password);
+        utility.clickOnWebElement(loginPageLoginButton);
     }
 
     public void loginWait(String email, String password) {
@@ -60,7 +60,7 @@ public class LoginPage extends BasePage {
     }
 
     public void logout() {
-        logoutButton.click();
+        utility.clickOnWebElement(logoutButton);
         waitForURLToContain(LOGIN_PAGE_URL_ENDING);
     }
 }

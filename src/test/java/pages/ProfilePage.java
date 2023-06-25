@@ -28,6 +28,12 @@ public class ProfilePage extends BasePage {
 
     public final String PROFILE_PAGE_URL_ENDING = "/profile";
 
+    private final String HTTPS_URL_BEGINNING = "https://";
+
+    public String getHTTPS_URL_BEGINNING() {
+        return HTTPS_URL_BEGINNING;
+    }
+
     public ProfilePage(WebDriver driver, WebDriverWait webDriverWait) {
         super(driver, webDriverWait);
     }
@@ -63,33 +69,27 @@ public class ProfilePage extends BasePage {
     public void clearAllInputFields() {
         clearInputField(nameInputFieldMyProfile);
         clearInputField(phoneInputFieldMyProfile);
-        deleteCityButton.click();
+        utility.clickOnWebElement(deleteCityButton);
         clearInputField(countryInputFieldMyProfile);
         clearInputField(twitterURLInputFieldMyProfile);
         clearInputField(gitHubURLInputFieldMyProfile);
     }
 
-    private void clearInputField(WebElement element) {
-        element.click();
-        element.sendKeys(Keys.CONTROL + "a");
-        element.sendKeys(Keys.DELETE);
-    }
-
     public void chooseCity(String city) {
-        cityInputFieldMyProfile.click();
-        cityInputFieldMyProfile.sendKeys(Keys.ENTER, city, Keys.ENTER);
+        utility.clickOnWebElement(cityInputFieldMyProfile);
+        sendKeysToElement(cityInputFieldMyProfile, Keys.ENTER, city, Keys.ENTER);
     }
 
     public void editProfile(String name, String phoneNumber, String city, String country, String twitterURL, String gitHubURL) {
-        myProfileButton.click();
+        utility.clickOnWebElement(myProfileButton);
         clearAllInputFields();
-        nameInputFieldMyProfile.sendKeys(name);
-        phoneInputFieldMyProfile.sendKeys(phoneNumber);
+        sendKeysToElement(nameInputFieldMyProfile, name);
+        sendKeysToElement(phoneInputFieldMyProfile, phoneNumber);
         chooseCity(city);
-        countryInputFieldMyProfile.sendKeys(country);
-        twitterURLInputFieldMyProfile.sendKeys("https://" + twitterURL);
-        gitHubURLInputFieldMyProfile.sendKeys("https://" + gitHubURL);
-        saveButton.click();
+        sendKeysToElement(countryInputFieldMyProfile, country);
+        sendKeysToElement(twitterURLInputFieldMyProfile, HTTPS_URL_BEGINNING + twitterURL);
+        sendKeysToElement(gitHubURLInputFieldMyProfile, HTTPS_URL_BEGINNING + gitHubURL);
+        utility.clickOnWebElement(saveButton);
     }
 }
 

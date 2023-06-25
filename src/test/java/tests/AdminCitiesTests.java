@@ -1,6 +1,5 @@
 package tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -14,6 +13,11 @@ public class AdminCitiesTests extends BaseTest {
     private AdminCitiesPage adminCitiesPage;
     private String cityName;
 
+    private final String SAVED_SUCCESSFULLY_MESSAGE = "Saved successfully";
+
+    private final String DELETED_SUCCESSFULLY_MESSAGE = "Deleted successfully";
+
+
     @Override
     @BeforeClass
     public void beforeClass() {
@@ -25,7 +29,7 @@ public class AdminCitiesTests extends BaseTest {
     @BeforeMethod
     public void beforeMethod() {
         super.beforeMethod();
-        loginPage.getLoginButton().click();
+        utility.clickOnWebElement(loginPage.getLoginButton());
         loginPage.login(loginPage.VALID_EMAIL, loginPage.VALID_PASSWORD);
         adminCitiesPage.visitAdminCitiesPageListCitiesPt2();
         cityName = utility.fakeCity();
@@ -33,35 +37,35 @@ public class AdminCitiesTests extends BaseTest {
 
     @Test
     public void visitAdminCitiesPageListCities() {
-        Assert.assertTrue(driver.getCurrentUrl().endsWith(adminCitiesPage.ADMIN_CITIES_PAGE_URL_ENDING));
-        Assert.assertTrue(loginPage.webelementIsDisplayed(loginPage.getLogoutButton()));
+        assertTrue(adminCitiesPage.ADMIN_CITIES_PAGE_URL_ENDING);
+        assertTrue(loginPage.webelementIsDisplayed(loginPage.getLogoutButton()));
     }
 
     @Test
     public void createNewCity() {
         adminCitiesPage.addNewItem(cityName);
-        Assert.assertTrue(adminCitiesPage.getWebElementText(adminCitiesPage.getItemSavedClosePopupMessage()).contains("Saved successfully"));
+        assertTrue(adminCitiesPage.getItemSavedClosePopupMessage(), SAVED_SUCCESSFULLY_MESSAGE);
     }
 
     @Test
     public void editCity() {
         adminCitiesPage.editNewCity(cityName);
-        Assert.assertTrue(adminCitiesPage.getWebElementText(adminCitiesPage.getItemSavedClosePopupMessage()).contains("Saved successfully"));
+        assertTrue(adminCitiesPage.getItemSavedClosePopupMessage(), SAVED_SUCCESSFULLY_MESSAGE);
     }
 
     @Test
     public void searchCity() {
         adminCitiesPage.editNewCity(cityName);
-        adminCitiesPage.searchCity(cityName + " edited");
-        Assert.assertEquals(adminCitiesPage.getWebElementText(adminCitiesPage.getSearchResult()), cityName + " edited");
+        adminCitiesPage.searchCity(cityName + adminCitiesPage.getEDIT_CITY_TEXT());
+        assertEquals(adminCitiesPage.getWebElementText(adminCitiesPage.getSearchResult()), cityName + adminCitiesPage.getEDIT_CITY_TEXT());
     }
 
     @Test
     public void deleteCity() {
         adminCitiesPage.editNewCity(cityName);
         adminCitiesPage.searchCityWait(cityName);
-        Assert.assertTrue(adminCitiesPage.getWebElementText(adminCitiesPage.getNameOfCitySearchResult()).contains(cityName));
+        assertTrue(adminCitiesPage.getNameOfCitySearchResult(), cityName);
         adminCitiesPage.deleteCity();
-        Assert.assertTrue(adminCitiesPage.getWebElementText(adminCitiesPage.getItemSavedClosePopupMessage()).contains("Deleted successfully"));
+        assertTrue(adminCitiesPage.getItemSavedClosePopupMessage(), DELETED_SUCCESSFULLY_MESSAGE);
     }
 }
